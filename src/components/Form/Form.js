@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { getContact } from 'redux/contacts/contacts-selectors';
+import { fetchContacts, addContact } from 'redux/contacts/contacts-operations';
 import { FormStyled, FormInput, FormLabel, AddButton } from './Form.styled';
-import actions from '../../redux/contacts/contacts-actions';
-import { getContact } from '../../redux/contacts/contacts-selectors';
 
 export default function Form() {
   const [name, setName] = useState('');
@@ -10,6 +10,8 @@ export default function Form() {
 
   const contacts = useSelector(getContact);
   const dispatch = useDispatch();
+
+  useEffect(() => dispatch(fetchContacts()), [dispatch]);
 
   const handleSubmit = evt => {
     evt.preventDefault();
@@ -23,7 +25,7 @@ export default function Form() {
     ) {
       return alert(`${name} is added`);
     }
-    dispatch(actions.addContact({ name, number }));
+    dispatch(addContact({ name, number }));
 
     reset();
   };
